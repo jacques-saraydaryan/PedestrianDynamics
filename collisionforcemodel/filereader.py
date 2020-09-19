@@ -24,7 +24,12 @@ class FileReader(object):
 
         standard_parse_functions = {
             'world_height': world.set_height,
-            'world_width': world.set_width
+            'world_width': world.set_width,
+            'time_step': world.set_timestep,
+            'spawn_1x' : world.set_spawn_1x,
+            'spawn_1y' : world.set_spawn_1y,
+            'spawn_2x' : world.set_spawn_2x,
+            'spawn_2y' : world.set_spawn_2y
             }
 
         for key in data:

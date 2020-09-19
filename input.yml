@@ -1,2 +1,7 @@
 world_height: 10
 world_width: 20
+time_step: 0.1
+spawn_1x: 0
+spawn_1y: 4
+spawn_2x: 12
+spawn_2y: 0

@@ -9,17 +9,45 @@ Parametrs set in the file 'input.yml'
 
 
 import os
+import matplotlib.pyplot as plt
 
 import collisionforcemodel as cfm
 
 def main(args):
-    print ("Hello World")
+    image_directory = "img"
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
+
+
     loader = cfm.FileReader(args.file)
     world = loader.world
 
-    print ('Initial: ',world.get_height())
-    world.set_height(20)
-    print ('Final: ', world.get_height())
+
+    total_time = 60;
+    timesteps = int(total_time/world.get_time_step())
+
+    # Simulate Function
+
+    for i in range(timesteps):
+        if i%(2/world.get_time_step()) == 0:
+            world.set_pedestrian(1,[1,0])
+            world.set_pedestrian(2,[0,1])
+        world.simulate()
+        world.eliminate_exited()
+        if i%50 == 0:
+            figure = world.plot()
+            figure.savefig("{}/{}.png".format(image_directory, int(world.get_time_step()*((i + 1)))),
+                       bbox_inches = 'tight',
+                       pad_inches = 0.1)
+            figure.clear()
+            plt.close(figure)
+
+    figure = world.plot()
+    figure.savefig("{}/{}.png".format(image_directory, timesteps*world.get_time_step()),
+               bbox_inches = 'tight',
+               pad_inches = 0.1)
+    figure.clear()
+    plt.close(figure)
 
 
 
