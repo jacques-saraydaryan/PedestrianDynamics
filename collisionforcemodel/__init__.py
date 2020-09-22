@@ -4,6 +4,5 @@
 #     pass
 
 from .pedestrian import Pedestrian
-from .obstacles import Obstacles
 from .world import World
 from .filereader import FileReader
