@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-
+import sys
 import numpy as np
 
 class Pedestrian():
@@ -13,6 +13,7 @@ class Pedestrian():
         self.target_point = [0,0]
         self.position = [0,0]
         self.velocity = [0,0]
+        self.braking_chance = 0
 
         self.average_velocity = [0,0]
         self.lambda_f = 1.0
@@ -20,7 +21,8 @@ class Pedestrian():
         self.total_force = [0,0]
         self.prefered_force = [0,0]
         self.repulsive_force = [0,0]
-
+        self.wall_force = [0,0]
+        self.wall_point = [0,0]
 
 
     def set_mass(self,mass):
@@ -48,17 +50,17 @@ class Pedestrian():
         self.average_velocity = velocity
 
     def set_velocity(self):
-        if (self.target_point[0]>self.target_point[1]):
-            self.velocity[0] = self.maximum_velocity
-        else:
-            self.velocity[1] = self.maximum_velocity
+        dir = np.subtract(self.target_point,self.position)
+        desired_dir = dir/np.linalg.norm(dir)
+        self.velocity = np.multiply(desired_dir,self.maximum_velocity)
+
+    def set_brakevelocity(self):
+        self.velocity = [0,0]
 
     def set_zeroforce(self):
         self.total_force = [0,0]
         self.repulsive_force = [0,0]
         self.prefered_force = [0,0]
-
-
 
     def set_preferedforce(self,force):
         self.prefered_force = force
@@ -66,12 +68,16 @@ class Pedestrian():
     def set_repulsiveforce(self,force):
         self.repulsive_force = force
 
+    def set_wallforce(self,force):
+        self.wall_force = force
+
+    def set_wallpoint(self,point):
+        self.wall_point = point
+
 
 
     def calculate_force(self):
-        self.total_force = self.prefered_force+self.repulsive_force
-
-
+        self.total_force = self.prefered_force+self.repulsive_force+self.wall_force
 
 
 

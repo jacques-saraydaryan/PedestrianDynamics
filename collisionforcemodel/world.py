@@ -28,8 +28,13 @@ class World(object):
         self.id = 0
         self.threshold = 2.0
         self.relaxation_length = 0.3
+        self.max_acceleration = 2
 
-        self.social_force_constant = 24000
+        self.social_force_constant = 2000
+        self.body_force_constant = 12000
+        self.friction_force_constant = 24000
+        self.obstacle_force_constant = 50
+        self.sigma_obst = 0.2
 
 
     def set_height(self,height):
@@ -132,24 +137,14 @@ class World(object):
             return [self.spawnpoints[0],self.spawnpoints[1]]
         elif source == 2:
             return [self.spawnpoints[2],self.spawnpoints[3]]
-        elif source == 3:
-            return [self.spawnpoints[4],self.spawnpoints[5]]
-        elif source == 4:
-            return [self.spawnpoints[6],self.spawnpoints[7]]
 
 
 
-
-    def add_pedestrian(self,spawnindex,targetindex,count):
-        if spawnindex == 1 and count%2 == 0:
+    def add_pedestrian(self,spawnindex,targetindex):
+        if spawnindex == 1:
             self.pedestrians.append(self.spawn_pedestrian(self.id,1,targetindex))
-        if spawnindex == 1 and count%2 == 1:
+        if spawnindex == 2:
             self.pedestrians.append(self.spawn_pedestrian(self.id,2,targetindex))
-        if spawnindex == 2 and count%2 == 0:
-            self.pedestrians.append(self.spawn_pedestrian(self.id,3,targetindex))
-        if spawnindex == 2 and count%2 == 1:
-            self.pedestrians.append(self.spawn_pedestrian(self.id,4,targetindex))
-
         self.id+=1
 
     def spawn_pedestrian(self,source,spawnindex,targetindex):
@@ -177,6 +172,7 @@ class World(object):
             p.set_zeroforce()
             self.calculate_preferredforce(p)
             self.calculate_socialrepulsiveforce(p)
+            self.calculate_wallforce(p)
 
         for p in self.pedestrians:
             p.update_velocity(self.delta_t)
@@ -211,7 +207,10 @@ class World(object):
     def calculate_preferredforce(self,p):
             veldir = np.multiply(self.unit_vector(p.target_point,p.position),p.maximum_velocity)
             term2 = np.multiply(p.average_velocity,(1-p.lambda_f))
-            prefered_velocity = np.add(np.multiply(veldir,p.lambda_f),term2)
+            dir = np.subtract(p.target_point,p.position)
+            desired_dir = dir/np.linalg.norm(dir)
+            prefered_velocity = np.multiply(desired_dir,1.1)
+#            prefered_velocity = np.add(np.multiply(veldir,p.lambda_f),term2)
             prefered_force = np.multiply(np.subtract(prefered_velocity,p.velocity),p.mass/p.lambda_f)
             p.set_preferedforce(prefered_force)
 
@@ -223,17 +222,64 @@ class World(object):
                 continue
 
             dist = np.subtract(r.position,p.position)
-            distance = np.sqrt(dist[0]**2+dist[1]**2)
-            overlap = 2*p.radius-distance
-            normal = -dist/distance
-            tangent=[-normal[1],normal[0]]
+            distance = np.linalg.norm(dist)
 
             if distance > self.threshold:
                 continue
 
-            temp = self.social_force_constant*np.exp(overlap/self.relaxation_length)
-            social_force = np.multiply(normal,temp)
-            p.set_repulsiveforce(np.add(p.repulsive_force,social_force))
+            overlap = 2*p.radius-distance
+            normal = -dist/distance
+            tangent=[-normal[1],normal[0]]
+
+            social_const = self.social_force_constant*np.exp(overlap/self.relaxation_length)
+            social_force = np.multiply(normal,social_const)
+
+            pushing_const = self.body_force_constant*overlap
+            pushing_force = np.multiply(normal,pushing_const)
+
+            fric_const =np.multiply(tangent,self.friction_force_constant*overlap)
+            term2 = np.multiply(tangent,np.subtract(r.velocity,p.velocity))
+            friction_force = np.multiply(fric_const,term2)
+
+            push_fric = np.add(pushing_force,friction_force)
+            unit_pushfric = push_fric/np.linalg.norm(push_fric)
+            force_pushfric = np.multiply(unit_pushfric,self.max_acceleration)
+
+            repulsive_force = np.add(social_force,force_pushfric)
+
+            p.set_repulsiveforce(np.add(p.repulsive_force,repulsive_force))
+
+
+    def calculate_wallforce(self,p):
+        wall_point = self.get_nearest_wall(p.position,p.target_point)
+        p.set_wallpoint(wall_point)
+        dist = np.subtract(wall_point,p.position)
+        distance = np.linalg.norm(dist)
+        if distance < 2:
+            normal = -dist/distance
+            social_const = self.obstacle_force_constant*np.exp(-distance/self.sigma_obst)
+            wall_force = np.multiply(normal,social_const)
+            p.set_wallforce(np.add(p.wall_force,wall_force))
+        else:
+            p.set_wallforce([0,0])
+
+
+    def get_nearest_wall(self,point,target):
+        if target[0] > target[1]:
+            dist1 = np.linalg.norm(np.subtract([point[0],10],point))
+            dist2 = np.linalg.norm(np.subtract([point[0],15],point))
+            if dist1 > dist2:
+                return[point[0],15]
+            else:
+                return[point[0],10]
+        if target[1] > target[0]:
+            dist1 = np.linalg.norm(np.subtract([10,point[1]],point))
+            dist2 = np.linalg.norm(np.subtract([15,point[1]],point))
+            if dist1 > dist2:
+                return [15,point[1]]
+            else:
+                return [10,point[1]]
+
 
 
 
@@ -254,18 +300,3 @@ class World(object):
         ax.scatter(x,y,color='black')
 
         return figure
-
-
-
-
-
-    """
-                deltav = np.multiply(np.subtract(r.velocity,p.velocity),tangent)
-                fricconst = np.multiply(tangent,self.friction_force_constant*overlap)
-                friction_force = np.multiply(deltav,fricconst)
-
-                push_force = np.multiply(normal,self.body_force_constant*overlap)
-
-                additional_force = friction_force + push_force
-                print(additional_force)
-    """
