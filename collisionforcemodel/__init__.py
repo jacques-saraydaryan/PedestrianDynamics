@@ -1,7 +1,6 @@
-# This Python file uses the following encoding: utf-8
-
-# if __name__ == "__main__":
-#     pass
+#*********************************************************************************
+# Generate Library - Collision Force Model to import as cfm
+#*********************************************************************************
 
 from .pedestrian import Pedestrian
 from .world import World
