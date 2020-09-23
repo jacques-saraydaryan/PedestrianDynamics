@@ -27,6 +27,7 @@ class Pedestrian():
         self.wall_point = [0,0]             # The Nearest Wall to Pedestrian
 
         self.direction = 0                  # Target 1 = x_axis, 2 = y_axis
+        self.temp_velocity = [0,0]
 
     #---------------------------------------------------------------------------------------
     #***************** Setter Functions for Class Variables*********************************
@@ -76,6 +77,7 @@ class Pedestrian():
         dir = np.subtract(self.target_point,self.position)
         desired_dir = dir/np.linalg.norm(dir)
         self.velocity = np.multiply(desired_dir,self.maximum_velocity)
+        self.temp_velocity = self.velocity
 
     # Set Forces to Zero after each Timestep
     def set_zeroforce(self):
@@ -106,10 +108,13 @@ class Pedestrian():
     def update_velocity(self,timestep):
         self.calculate_force()
         self.velocity = np.add(self.velocity,np.multiply(self.total_force,timestep))
+        norm_value = np.linalg.norm(self.velocity)
+        self.velocity = np.multiply(self.velocity/norm_value,min(norm_value,self.maximum_velocity))
+
 
     # Update Position of pedestrian x(t) = x(t-1) + dt*v
     def update_position(self,timestep):
-        self.position = np.add(self.position,np.multiply(self.velocity,timestep))
+        self.position = np.add(self.position,np.multiply(self.velocity, timestep))
         self.correct_position()
 
 

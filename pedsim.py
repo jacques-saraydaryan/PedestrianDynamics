@@ -41,7 +41,7 @@ def main(args):
 
     #Constant Simulation Parameters
     timer = 60                          #Maximum Time for Simulation
-    print_png = 1                       #Time at which a plot to be made
+    print_png = world.print_png         #Time at which a plot to be made
     time_step = world.delta_t
     iter_max = int(timer/time_step)
 
@@ -67,8 +67,10 @@ def main(args):
     #end = time()
     #print(f'It took {end-start} seconds!')
 
+        printfile('\n at timestep:{}'.format(i))
+
         #write Average Velocity of World
-        printfile("{}\t{}".format(i*time_step,np.linalg.norm(world.pedestrians[0].average_velocity)))
+        printfile("{}\t{}".format(i*iter_max, np.linalg.norm(world.pedestrians[0].average_velocity)))
 
         #Output Images in directory
         if i%print_iter == 0:

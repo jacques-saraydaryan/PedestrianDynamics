@@ -26,6 +26,7 @@ class World(object):
         self.maximum_velocity = 0           # Maximum Velocity of the Pedestrian given as input
 
         self.id = 0                         # System generated id for Pedestrians
+        self.print_png = 0                  # PRINT CONTROL from input
 
         #For Force Calculations Constants
         #Preferred Force Constants
@@ -67,6 +68,9 @@ class World(object):
 
     def set_maxvelocity(self,vel):
         self.maximum_velocity = vel
+
+    def set_printpng(self,index):
+        self.print_png = index
 
     def set_point1x(self,point):
         self.spawnpoints[0] = point
@@ -196,19 +200,23 @@ class World(object):
             social_const = self.social_force_constant*np.exp(overlap/self.relaxation_length)
             social_force = np.multiply(normal,social_const)
 
-            #Calculate Pushing Force
-            pushing_const = self.body_force_constant*overlap
-            pushing_force = np.multiply(normal,pushing_const)
+            force_pushfric = [0,0]
 
-            #Calculate Friction Force
-            fric_const =np.multiply(tangent,self.friction_force_constant*overlap)
-            term2 = np.multiply(tangent,np.subtract(r.velocity,p.velocity))
-            friction_force = np.multiply(fric_const,term2)
+            #Friction Force assumed to be present only on contact
+            if distance < 0.5:
+                #Calculate Pushing Force
+                pushing_const = self.body_force_constant*overlap
+                pushing_force = np.multiply(normal,pushing_const)
 
-            #Normalize Physical Forces
-            push_fric = np.add(pushing_force,friction_force)
-            unit_pushfric = push_fric/np.linalg.norm(push_fric)
-            force_pushfric = np.multiply(unit_pushfric,self.max_acceleration)
+                #Calculate Friction Force
+                fric_const =np.multiply(tangent,self.friction_force_constant*overlap)
+                term2 = np.multiply(tangent,np.subtract(r.velocity,p.velocity))
+                friction_force = np.multiply(fric_const,term2)
+
+                #Normalize Physical Forces
+                push_fric = np.add(pushing_force,friction_force)
+                unit_pushfric = push_fric/np.linalg.norm(push_fric)
+                force_pushfric = np.multiply(unit_pushfric,self.max_acceleration)
 
             #Calculate Repulsive force on Pedestrian
             repulsive_force = np.add(social_force,force_pushfric)

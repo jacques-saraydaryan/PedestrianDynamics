@@ -37,7 +37,8 @@ class FileReader:
             'target_point1x': world.set_target1x,
             'target_point1y': world.set_target1y,
             'target_point2x': world.set_target2x,
-            'target_point2y': world.set_target2y
+            'target_point2y': world.set_target2y,
+            'print_png': world.set_printpng
             }
 
 
