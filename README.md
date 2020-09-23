@@ -1,6 +1,15 @@
 # PedestrianDynamics
 A solver written from scratch to simulate pedestrian movement
 
-Runs with Python3:
+-Developed in OpenSUSE Tumbleweed
+-Runs with Python3 or higher:
 
-python3 pedsim.py
+Required Libraries:
+numpy
+matplotlib
+yaml
+
+
+-Run the command in terminal of file location
+python pedsim.py
+
