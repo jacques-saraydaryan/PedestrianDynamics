@@ -137,7 +137,9 @@ class World(object):
         p.set_targetpoint(self.get_targetpoint(targetindex))        # Set Target point from input
         p.set_position(self.get_spawnpoint(spawnindex))             # Set Spawn point from input
         p.set_velocity()                                            # Set Velocity based on Maximum Velocity
+        p.set_direction(spawnindex)                                 # Set spawn index for correction
         return p                                                    # Returns a Class:Pedestrian
+
 
     # Calculate Average Velocity for the World of Pedestrians
     def calc_average_velocity(self):
@@ -162,8 +164,8 @@ class World(object):
     def calculate_preferredforce(self,p):
             veldir = np.multiply(self.unit_vector(p.target_point,p.position),p.maximum_velocity)
             term2 = np.multiply(p.average_velocity,(1-p.lambda_f))
-            dir = np.subtract(p.target_point,p.position)
-            desired_dir = dir/np.linalg.norm(dir)
+            direc = np.subtract(p.target_point,p.position)
+            desired_dir = direc/np.linalg.norm(direc)
             prefered_velocity = np.multiply(desired_dir,self.desired_velocity)
             prefered_force = np.multiply(np.subtract(prefered_velocity,p.velocity),p.mass/p.lambda_f)
             p.set_preferedforce(prefered_force)
