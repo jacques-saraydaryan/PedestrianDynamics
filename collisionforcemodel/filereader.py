@@ -1,16 +1,53 @@
 #*********************************************************************************
 # CLASS FileReader - Reads input from file input.yml and sets up World
 #*********************************************************************************
+"""
+CLASS  FileReader
+-----------------
+    A Class that reads input and sets up the World
 
+MODULES REQUIRED
+----------------
+    YAML
 
-from yaml import load,dump
-from yaml import Loader,Dumper
+EXAMPLE
+-------
+    To call the class pass the input file name to class
+        FileReader('filename')
+    ONLY USE THE YAML INPUT FILE GIVEN WITH THIS CODE
+"""
 
+from yaml import load
+from yaml import Loader
 
 from .world import World
-from .pedestrian import Pedestrian
 
 class FileReader:
+    """
+    Class FileReader - Reads and sets the simulation
+
+    Call
+    ----
+    FileReader(filename)
+
+    filename : string
+        Name of the input file to be read
+
+    Parameters
+    ----------
+    world : class
+        Creates a world with inputed variables
+    standard_parse_functions : map
+        Maps the keywords to values from the input file
+    key : map_string
+        Keywords in input file
+    data : map_datatype
+        Values for each keywork in input file
+
+    Returns
+    -------
+        None
+    """
     def __init__(self,filename=None):
         if filename:
             with open(filename) as file:
@@ -38,7 +75,8 @@ class FileReader:
             'target_point1y': world.set_target1y,
             'target_point2x': world.set_target2x,
             'target_point2y': world.set_target2y,
-            'print_png': world.set_printpng
+            'print_png': world.set_printpng,
+            'spawn_method': world.set_spawnmethod
             }
 
 
@@ -46,6 +84,3 @@ class FileReader:
         for key in data:
             if key in standard_parse_functions:
                 standard_parse_functions[key](data[key])
-
-
-
