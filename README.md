@@ -1,5 +1,6 @@
 # PedestrianDynamics
 A solver written from scratch to simulate pedestrian movement
+
 REPOSITORY SIZE ~ 80 MB
 
 CODE IN THE FOLDER:
