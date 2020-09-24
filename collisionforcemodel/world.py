@@ -159,7 +159,7 @@ class World(object):
 
         #For Force Calculations Constants
         #Preferred Force Constants
-        self.relaxation_time = 0.5
+        self.relaxation_time = 1.0
 
         #Repulsive Force Constants
         self.social_force_constant = 2000.0
