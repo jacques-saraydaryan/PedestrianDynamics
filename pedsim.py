@@ -110,6 +110,32 @@ def main(args):
     loader = cfm.FileReader(args.file)
     world = loader.world
 
+    #Check input variables in range and exit if no
+    if world.mass <60 or world.mass>90:
+        print("Wrong input in parameter 'pedestrian_mass' -- PROGRAM TERMINATED")
+        print("The value should be between 60 and 90")
+        sys.exit()
+
+    if world.desired_velocity < 1.1 or world.desired_velocity > 1.3:
+        print("Wrong input in parameter 'desired_velocity' -- PROGRAM TERMINATED")
+        print("The value should be between 1.1 and 1.3")
+        sys.exit()
+
+    if world.maximum_velocity < 1.1 or world.maximum_velocity > 1.3:
+        print("Wrong input in parameter 'desired_velocity' -- PROGRAM TERMINATED")
+        print("The value should be between 1.1 and 1.3")
+        sys.exit()
+
+    if world.pedestrian_fluxright < 0.2 or world.pedestrian_fluxright > 2.0:
+        print("Wrong input in parameter 'flux_right' -- PROGRAM TERMINATED")
+        print("The value should be between 0.2 and 2.0")
+        sys.exit()
+
+    if world.pedestrian_fluxup < 0.2 or world.pedestrian_fluxup > 2.0:
+        print("Wrong input in parameter 'flux_up' -- PROGRAM TERMINATED")
+        print("The value should be between 0.2 and 2.0")
+        sys.exit()
+
     #Constant Simulation Parameters
     timer = 60                          #Maximum Time for Simulation
     print_png = world.print_png         #Time at which a plot to be made

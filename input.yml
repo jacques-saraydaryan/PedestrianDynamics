@@ -4,7 +4,7 @@
 spawn_method    : random         #point/random
 pedestrian_mass : 75.0          #Mass of pedestrians (set at default 75 kg)
 desired_velocity: 1.1           #Prefered Velocity of the Pedestrians [1.1, 1.3]
-maximum_velocity: 1.1           #Maximum velocity of the Pedestrians (SET: 1.3)
+maximum_velocity: 1.3           #Maximum velocity of the Pedestrians (SET: 1.3)
 flux_right      : 0.5          #Pedestrian flux at 'C' in interval [0.2,2.0]
 flux_up         : 0.5           #Pedestrian flux at 'A' in interval [0.2,2.0]
 print_png       : 0.5           #PRINT CONTROL in seconds
