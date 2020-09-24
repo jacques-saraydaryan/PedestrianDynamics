@@ -6,7 +6,7 @@ REPOSITORY SIZE ~ 80 MB
 CODE IN THE FOLDER:
 	Pedestrian_Flow_Simulation
 
--Run the command in terminal of file location
+-Run the command in terminal of file location:--
 	python pedsim.py
 
 
