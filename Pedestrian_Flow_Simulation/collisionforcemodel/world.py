@@ -159,7 +159,7 @@ class World(object):
 
         #For Force Calculations Constants
         #Preferred Force Constants
-        self.relaxation_time = 1.0
+        self.relaxation_time = 0.5#1.0
 
         #Repulsive Force Constants
         self.social_force_constant = 2000.0
@@ -191,6 +191,7 @@ class World(object):
             Sets the self.height as argument
         """
         self.height = height
+    # End set_height method
 
     def set_width(self,width):
         """
@@ -206,6 +207,7 @@ class World(object):
             Sets the self.width as argument
         """
         self.width = width
+    # End set_width method
 
     def set_pedestrianmass(self,mass):
         """
@@ -221,6 +223,7 @@ class World(object):
             Sets the self.mass as argument
         """
         self.mass = mass
+    # End set_pedestrianmass method
 
     def set_fluxright(self,flux):
         """
@@ -237,6 +240,7 @@ class World(object):
             Sets the self.pedestrian_fluxright as argument
         """
         self.pedestrian_fluxright = flux
+    # End set_fluxright method
 
     def set_fluxup(self,flux):
         """
@@ -253,6 +257,7 @@ class World(object):
             Sets the self.pedestrian_fluxup as argument
         """
         self.pedestrian_fluxup = flux
+    # End set_fluxup method
 
     def set_desiredvelocity(self,vel):
         """
@@ -268,6 +273,7 @@ class World(object):
             Sets the self.desired_velocity as argument
         """
         self.desired_velocity = vel
+    # End set_desiredvelocity method
 
     def set_maxvelocity(self,vel):
         """
@@ -283,6 +289,7 @@ class World(object):
             Sets the self.maximum_velocity as argument
         """
         self.maximum_velocity = vel
+    # End set_maximumvelocity method
 
     def set_printpng(self,index):
         """
@@ -298,6 +305,7 @@ class World(object):
             Sets the self.print_png as argument
         """
         self.print_png = index
+    # End print_png mehtod
 
     def set_point1x(self,point):
         """
@@ -313,6 +321,7 @@ class World(object):
             Sets the spawn points used for Spawn Type: Points
         """
         self.spawnpoints[0] = point
+    # End set_point1x method
 
     def set_point1y(self,point):
         """
@@ -328,6 +337,7 @@ class World(object):
             Sets the spawn points used for Spawn Type: Points
         """
         self.spawnpoints[1] = point
+    # End set_point1y method
 
     def set_point2x(self,point):
         """
@@ -343,6 +353,7 @@ class World(object):
             Sets the spawn points used for Spawn Type: Points
         """
         self.spawnpoints[2] = point
+    # End set_point2x method
 
     def set_point2y(self,point):
         """
@@ -358,6 +369,7 @@ class World(object):
             Sets the spawn points used for Spawn Type: Points
         """
         self.spawnpoints[3] = point
+    # End set_point2y method
 
     def set_target1x(self,point):
         """
@@ -373,6 +385,7 @@ class World(object):
             Sets the target points
         """
         self.targetpoints[0] = point
+    # End set_target1x method
 
     def set_target1y(self,point):
         """
@@ -388,6 +401,7 @@ class World(object):
             Sets the target points
         """
         self.targetpoints[1] = point
+    # End set_target1y method
 
     def set_target2x(self,point):
         """
@@ -403,6 +417,7 @@ class World(object):
             Sets the target points
         """
         self.targetpoints[2] = point
+    # End set_target2x method
 
     def set_target2y(self,point):
         """
@@ -418,6 +433,7 @@ class World(object):
             Sets the target points
         """
         self.targetpoints[3] = point
+    # End set_target2y method
 
     def set_pedflux1(self,flux):
         """
@@ -433,6 +449,7 @@ class World(object):
             Appends the list of pedestrian flux
         """
         self.pedestrian_flux.append(flux)
+    # End set_pedflux1 method
 
     def set_pedflux2(self,flux):
         """
@@ -448,6 +465,7 @@ class World(object):
             Appends the list of pedestrian flux
         """
         self.pedestrian_flux.append(flux)
+    # End set_pedflux2 method
 
     def set_delta_t(self,time):
         """
@@ -463,6 +481,7 @@ class World(object):
             Sets self.delta_t as argument
         """
         self.delta_t = time
+    # End set_delta_t method
 
     def set_spawnmethod(self,method):
         """
@@ -480,13 +499,14 @@ class World(object):
             Sets self.spawn_method to args
         """
         self.spawn_method = method
+    # End set_spawnmethod method
 
 
     #---------------------------------------------------------------------------------------
     #********************** Functions for Calculation***************************************
     #---------------------------------------------------------------------------------------
     # Get spawn points @source = [1=='C', 2=='A']
-    def get_spawnpoint(self,source):
+    def get_spawnpoint(self,source): # return as if
         """
         Returns spawn points for a given target direction
 
@@ -504,6 +524,7 @@ class World(object):
             return [self.spawnpoints[0],self.spawnpoints[1]]
         elif source == 2:
             return [self.spawnpoints[2],self.spawnpoints[3]]
+    # End get_spawnpoint method
 
     # Get random spawn points @source = [1=='C', 2=='A']
     def get_randomspawnpoint(self,source):
@@ -524,6 +545,7 @@ class World(object):
             return [0, rn.randint(120,140)*0.1]
         if source == 2:
             return [rn.randint(120,140)*0.1, 0]
+    # End get_randomspawnpoint method
 
     # Get Target points @index = [1=='C', 2=='A']
     def get_targetpoint(self,index):
@@ -544,7 +566,7 @@ class World(object):
             return [self.targetpoints[0],self.targetpoints[1]]
         elif index == 2:
             return [self.targetpoints[2],self.targetpoints[3]]
-
+    # End get_targetpoint method
 
     # Add a pedestrian to the LIST [PEDESTRIANS] @spawnindex,@targetindex = [1=='C',2=='A']
     def add_pedestrian(self,spawnindex,targetindex):
@@ -572,6 +594,7 @@ class World(object):
         if spawnindex == 2:
             self.pedestrians.append(self.spawn_pedestrian(self.id_unique,spawnindex,targetindex))
         self.id_unique+=1
+    # End add_pedestrian method
 
     # Add a random spawn pedestrian to the LIST [PEDESTRIANS]
     def add_randompedestrian(self,spawnindex,targetindex):
@@ -599,6 +622,7 @@ class World(object):
         if spawnindex == 2:
             self.pedestrians.append(self.spawn_randompedestrian(self.id_unique,spawnindex,targetindex))
         self.id_unique+=1
+    # End add_randompedestrian method
 
     # Spawn a Pedestrian at given point
     def spawn_pedestrian(self,source,spawnindex,targetindex):
@@ -642,6 +666,7 @@ class World(object):
         p.set_velocity()                                      # Set Velocity based on Maximum Velocity
         p.set_direction(spawnindex)                           # Set spawn index for correction
         return p                                              # Returns a Class:Pedestrian
+    # End spawn_pedestrian method
 
     # Spawn a Pedestrian at a random point
     def spawn_randompedestrian(self,source,spawnindex,targetindex):
@@ -685,6 +710,7 @@ class World(object):
         p.set_velocity()                                      # Set Velocity based on Maximum Velocity
         p.set_direction(spawnindex)                           # Set spawn index for correction
         return p                                              # Returns a Class:Pedestrian
+    # End spawn_randompedestrian method
 
     # Calculate Average Velocity for the World of Pedestrians
     def calc_average_velocity(self):
@@ -717,6 +743,7 @@ class World(object):
         avg_vely /= len(self.pedestrians)
         for p in self.pedestrians:
             p.set_averagevelocity([avg_velx,avg_vely])
+    # End calc_average_velocity method
 
     # Calculate and return Unit Vector for given two points
     def unit_vector(self,target,position):
@@ -746,6 +773,7 @@ class World(object):
         vector = np.subtract(target,position)
         v_hat = vector/np.linalg.norm(vector)
         return [v_hat[0],v_hat[1]]
+    # End unit_vector method
 
     # Calculate Preferred Force = (mass/tau)*(preferred Velocity - Velocity)
     # @p: a Pedestrian class element from the List=[PEDESTRIANS]
@@ -781,6 +809,7 @@ class World(object):
         prefered_force = np.multiply(np.subtract(prefered_velocity,p.velocity),
                                                     p.mass/self.relaxation_time)
         p.set_preferedforce(prefered_force)
+    # End calculate_preferredforce method
 
     # Calculate Repulsive Force = Social_force + Physical_force
     # @p: a Pedestrian class element from the LIST=[PEDESTRIANS]
@@ -799,7 +828,7 @@ class World(object):
 
         Concept
         -------
-            Social Repulsion Force = Social_force + Phsyical_force
+            Social Repulsion Force = Social_force + Physical_force
             Only calculate Social force when pedestrians are within 2 meters
             Only calculate Physical force when pedestrians are very near 0.5 m
 
@@ -862,6 +891,7 @@ class World(object):
 
             #Write the Social Repulsive Force acting on individual Pedestrian
             p.set_repulsiveforce(np.add(p.repulsive_force,repulsive_force))
+    # End calculate_socialrepulsiveforce method
 
     # Return the nearest wall position @point - Pedestrian position @target - Pedestrian target
     # Only works for the given case (Weak Geometry Constraints for Code)
@@ -896,6 +926,7 @@ class World(object):
                 return [15,point[1]]
             else:
                 return [10,point[1]]
+    # End get_nearest_wall method
 
     # Calculate Wall Force = F0*rij*exp(-|rin|/sigma)
     # @p: a Pedestrian class element from the LIST=[PEDESTRIANS]
@@ -954,7 +985,7 @@ class World(object):
             p.set_wallforce(np.add(p.wall_force,wall_force))
         else:
             p.set_wallforce([0,0])
-
+    # End calculate_wallforce method
 
     # Simulate step for a given timestep
     def simulate(self):
@@ -993,6 +1024,7 @@ class World(object):
         for p in self.pedestrians:
             p.update_velocity(self.delta_t)         #Update Pedestrian Velocity
             p.update_position(self.delta_t)         #Update Pedestrian Position
+    # End simulate method
 
     # Eliminate Pedestrians who are out of geometry bound
     def eliminate_exited(self):
@@ -1015,6 +1047,7 @@ class World(object):
                 eliminate.append(i)
         for i in reversed(range(len(eliminate))):
             del self.pedestrians[eliminate[i]]
+    # End eliminate_exited method
 
     # Scatter Plot of pedestrians with colors @blue - from 'A', @red - from 'C'
     def plot(self):
@@ -1062,3 +1095,4 @@ class World(object):
         fig_ax.plot([15,25],[10,10],color='black',linewidth=5)
 
         return figure
+    # End plot method

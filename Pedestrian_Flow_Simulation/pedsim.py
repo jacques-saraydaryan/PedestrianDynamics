@@ -1,13 +1,11 @@
-#*********************************************************************************
+#**************************************************************************************
 # PEDESTRIAN FLOW SIMULATION
 # Author    : Arunaachalam Muralidharan
 # Version   : 2020_09_23
 # MODEL: Social Force Model
 # Made for Crossing Flow Geometry with pedestrian Flux(pi) [0.2,2.0]
 # Run times: @pi=2.0(660 s), @pi=1.5(370 s), @pi=1.0(220 s), @pi=0.5(55 s) @pi=0.2(20 s)
-# Reference Articles: F.Johansson(2013), Hassan(2017), Helbing(1995), Chraibi(2019)
-# Some inspirations from JuPedSim, Rex Valkering
-#*********************************************************************************
+#***************************************************************************************
 
 """
 PEDESTRIAN FLOW SIMULATION
@@ -32,9 +30,6 @@ REMARKS
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-
-#Written for Code Performance Testing (Comment out Otherwise)
-#from time import time
 
 import collisionforcemodel as cfm
 
@@ -103,14 +98,11 @@ def main(args):
     if not os.path.exists(image_directory):
         os.makedirs(image_directory)
 
-    #For Testing purpose only (Comment out Otherwise)
-    #start = time()
-
     #Loads from file
     loader = cfm.FileReader(args.file)
     world = loader.world
 
-    #Check input variables in range and exit if no
+    #Check input variables in range [!!CHECKER MODULE TO BE IMPLEMENTED!!]
     if world.mass <60 or world.mass>90:
         print("Wrong input in parameter 'pedestrian_mass' -- PROGRAM TERMINATED")
         print("The value should be between 60 and 90")
@@ -152,6 +144,10 @@ def main(args):
     if world.spawn_method == 'random':
         spawn_type = 1
 
+    print('The Simulation Parameters are given correctly.\n\nStarting Simulation ...')
+    print('See Folder "img" for progress:')
+    print('Program will stop automatically after {} graphs are plotted'.format(int((iter_max/print_iter)+1)))
+
 
     #Simulation Loop for real time 60 seconds and prints png per 1 second(default)
     for i in range(iter_max):
@@ -169,10 +165,6 @@ def main(args):
         world.calc_average_velocity()
         world.simulate()
         world.eliminate_exited()
-
-    #For Testing purpose only (Comment out Otherwise)
-    #end = time()
-    #print(f'It took {end-start} seconds!')
 
         #write Average Velocity of World
         if i%50 == 0:
@@ -211,9 +203,10 @@ def printfile(out_str):
     -------
         None
     """
-    with open('output.txt','a') as file_out:
+    with open('World_AverageVelocity.txt','a') as file_out:
         sys.stdout = file_out
         print(out_str)
+    file_out.close()
 
 
 #Script to parse arguments

@@ -35,14 +35,8 @@ class FileReader:
 
     Parameters
     ----------
-    world : class
-        Creates a world with inputed variables
-    standard_parse_functions : map
-        Maps the keywords to values from the input file
-    key : map_string
-        Keywords in input file
-    data : map_datatype
-        Values for each keywork in input file
+    filename: string
+        Name of the input file to be read
 
     Returns
     -------

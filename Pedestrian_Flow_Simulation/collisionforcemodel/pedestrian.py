@@ -135,6 +135,7 @@ class Pedestrian():
             Sets the self.mass as argument
         """
         self.mass = mass
+    # End set_mass method
 
     def set_radius(self,radius):
         """
@@ -150,6 +151,7 @@ class Pedestrian():
             Sets the self.radius as argument
         """
         self.radius = radius
+    # End set_radius method
 
     def set_desiredvelocity(self,desired_velocity):
         """
@@ -165,6 +167,7 @@ class Pedestrian():
             Sets the self.desired_velocity as argument
         """
         self.desired_velocity = desired_velocity
+    # End set_desiredvelocity method
 
     def set_maximumvelocity(self,maximum_velocity):
         """
@@ -180,6 +183,7 @@ class Pedestrian():
             Sets the self.maximum_velocity as argument
         """
         self.maximum_velocity = maximum_velocity
+    # End set_maximumvelocity method
 
     def set_targetpoint(self,target_point):
         """
@@ -195,6 +199,7 @@ class Pedestrian():
             Sets the self.target_point as argument
         """
         self.target_point = target_point
+    # End set_targetpoint method
 
     def set_position(self,position):
         """
@@ -210,6 +215,7 @@ class Pedestrian():
             Sets the self.position as argument
         """
         self.position = position
+    # end set_position method
 
     def set_averagevelocity(self,velocity):
         """
@@ -225,6 +231,7 @@ class Pedestrian():
             Sets the self.average_velocity as argument
         """
         self.average_velocity = velocity
+    # End set_averagevelocity method
 
     def set_preferedforce(self,force):
         """
@@ -240,6 +247,7 @@ class Pedestrian():
             Sets the self.prefered_force as argument
         """
         self.prefered_force = force
+    # End set_preferedforce method
 
     def set_repulsiveforce(self,force):
         """
@@ -255,6 +263,7 @@ class Pedestrian():
             Sets the self.repulsive_force as argument
         """
         self.repulsive_force = force
+    # End set_repulsiveforce method
 
     def set_wallforce(self,force):
         """
@@ -270,6 +279,7 @@ class Pedestrian():
             Sets the self.wall_force as argument
         """
         self.wall_force = force
+    # End set_wallforce method
 
     def set_wallpoint(self,point):
         """
@@ -285,6 +295,7 @@ class Pedestrian():
             Sets the self.target_point as argument
         """
         self.wall_point = point
+    # End set_wallpoint method
 
     def set_direction(self,direc):
         """
@@ -302,6 +313,7 @@ class Pedestrian():
             Sets the self.direction as argument
         """
         self.direction = direc
+    # End set_direction method
 
     #---------------------------------------------------------------------------------------
     #********************** Functions for Calculation***************************************
@@ -330,6 +342,7 @@ class Pedestrian():
         direc = np.subtract(self.target_point,self.position)
         desired_dir = direc/np.linalg.norm(direc)
         self.velocity = np.multiply(desired_dir,self.maximum_velocity)
+    # End set_velocity method
 
     # Set Forces to Zero after each Timestep
     def set_zeroforce(self):
@@ -348,6 +361,7 @@ class Pedestrian():
         self.total_force = [0,0]
         self.repulsive_force = [0,0]
         self.prefered_force = [0,0]
+    # End set_zeroforce method
 
     # Calculate Total Force by adding other forces F_prefered, F_wall, and F_repulsive
     def calculate_force(self):
@@ -363,6 +377,7 @@ class Pedestrian():
             Sets the total force = sum of all other forces
         """
         self.total_force = self.prefered_force+self.repulsive_force+self.wall_force
+    # End calculate_force method
 
     # ERROR CHECK: Usage statistically low: Correct position if the position is out of bound
     def correct_position(self):
@@ -384,17 +399,19 @@ class Pedestrian():
             Checks and sets the position of pedestrians to acceptable limit
         """
         if self.direction == 1:
-            if self.position[1] >= 15 and self.position[1] >= 10:
+            if self.position[1] >= 15 or self.position[1] <= 10:
                 if self.position[1] <= 10:
                     self.position[1] = self.wall_point[1]+0.1
                 if self.position[1] >= 15:
                     self.position[1] = self.wall_point[1]-0.1
+
         if self.direction == 2:
-            if self.position[0] >= 15 and self.position[1] >= 10:
+            if self.position[0] >= 15 or self.position[1] <= 10:
                 if self.position[0] <= 10:
                     self.position[0] = self.wall_point[0]+0.1
                 if self.position[0] >= 15:
                     self.position[0] = self.wall_point[0]-0.1
+    # End correct_position method
 
     # Update Velocity of Pedestrian v(t) = v(t-1) + dt*F
     def update_velocity(self,timestep):
@@ -422,7 +439,7 @@ class Pedestrian():
         self.velocity = np.add(self.velocity,np.multiply(self.total_force,timestep))
         norm_value = np.linalg.norm(self.velocity)
         self.velocity = np.multiply(self.velocity/norm_value,min(norm_value,self.maximum_velocity))
-
+    # End update_velocity method
 
     # Update Position of pedestrian x(t) = x(t-1) + dt*v
     def update_position(self,timestep):
@@ -447,3 +464,4 @@ class Pedestrian():
         """
         self.position = np.add(self.position,np.multiply(self.velocity, timestep))
         self.correct_position()
+    # End update_position method
